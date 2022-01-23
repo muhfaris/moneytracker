@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:moneytracker/custom/currency.dart';
+import 'package:moneytracker/widgets/currency.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({Key? key}) : super(key: key);
@@ -13,24 +13,24 @@ class AddTransaction extends StatefulWidget {
 class _AddTransactionState extends State<AddTransaction> {
   final _keyForm = GlobalKey<FormState>();
   final _amount = TextEditingController();
-  final _currencyFormat = NumberFormat("#,##0", "id");
+  final _dateController = TextEditingController();
 
   String? _selectedWallet = "bca";
   String? _selectedCategory = "food";
 
   late DateTime _selectedDate = DateTime.now();
-  final _initialDate = DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
-    final  _datePicker = await showDatePicker(
+    final _datePicker = await showDatePicker(
         context: context,
-        initialDate:  _selectedDate,
+        initialDate: _selectedDate,
         firstDate: DateTime(DateTime.now().year - 5),
         lastDate: DateTime(DateTime.now().year + 20));
 
     if (_datePicker != null && _datePicker != _selectedDate) {
       setState(() {
-        _selectedDate= _datePicker;
+        _selectedDate = _datePicker;
+        _dateController.text = DateFormat.yMd().format(_selectedDate);
       });
     }
   }
@@ -82,11 +82,10 @@ class _AddTransactionState extends State<AddTransaction> {
 
   Widget buildAmount() => TextFormField(
         controller: _amount,
-        decoration:
-            InputDecoration(
-                prefixText: "Rp ",
-                labelText: 'Amount',
-                border: OutlineInputBorder()),
+        decoration: InputDecoration(
+            prefixText: "Rp ",
+            labelText: 'Amount',
+            border: OutlineInputBorder()),
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
           CurrencyFormat()
@@ -100,7 +99,7 @@ class _AddTransactionState extends State<AddTransaction> {
       );
 
   Widget buildDate() => TextFormField(
-    initialValue: _selectedDate.toString(),
+        controller: _dateController,
         decoration: InputDecoration(
             labelText: 'Date',
             hintText: DateFormat('yyyy-MM-dd hh:mm').format(_selectedDate),
