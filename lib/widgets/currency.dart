@@ -21,3 +21,8 @@ class CurrencyFormat  extends TextInputFormatter{
     );
   }
 }
+
+      selection: TextSelection.collapsed(offset: newText.length)
+    );
+  }
+}

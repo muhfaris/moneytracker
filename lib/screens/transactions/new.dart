@@ -52,7 +52,16 @@ class _AddTransactionState extends State<AddTransaction> {
             buildDate(),
             const SizedBox(height: 16),
             buildCategory(),
-            const SizedBox(height: 16)
+            const SizedBox(height: 16),
+            RaisedButton(
+                child: Text(
+                "submit",
+                style:TextStyle(color:Colors.white)),
+              color: Colors.blue,
+              onPressed: (){
+ //                 if(_keyForm.currentState.validate()){}
+              },
+            ),
           ],
         ),
       ),
