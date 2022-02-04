@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:moneytracker/widgets/currency.dart';
+import 'package:moneytracker/screens/categories/add.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _AddTransactionState extends State<AddTransaction> {
 
   String? _selectedWallet = "bca";
   String? _selectedCategory = "food";
+  int? _incomeExpense = 1;
 
   late DateTime _selectedDate = DateTime.now();
 
@@ -45,6 +47,8 @@ class _AddTransactionState extends State<AddTransaction> {
         child: ListView(
           padding: EdgeInsets.all(16),
           children: <Widget>[
+            buildIncomeExpense(),
+            const SizedBox(height: 16),
             buildWalletTyte(),
             const SizedBox(height: 16),
             buildAmount(),
@@ -53,13 +57,13 @@ class _AddTransactionState extends State<AddTransaction> {
             const SizedBox(height: 16),
             buildCategory(),
             const SizedBox(height: 16),
-            RaisedButton(
-                child: Text(
-                "submit",
-                style:TextStyle(color:Colors.white)),
-              color: Colors.blue,
-              onPressed: (){
- //                 if(_keyForm.currentState.validate()){}
+            ElevatedButton(
+              child: Text("submit", style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+              ),
+              onPressed: () {
+                // if(_keyForm.currentState.validate()){}
               },
             ),
           ],
@@ -124,6 +128,14 @@ class _AddTransactionState extends State<AddTransaction> {
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(child: Text("Food"), value: "food"),
       DropdownMenuItem(child: Text("Home"), value: "home"),
+      DropdownMenuItem(
+          child: Text(
+            "+ New category",
+            style: new TextStyle(
+              color: Colors.green,
+            ),
+          ),
+          value: "new_category"),
     ];
     return menuItems;
   }
@@ -133,9 +145,43 @@ class _AddTransactionState extends State<AddTransaction> {
           InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
       value: _selectedCategory,
       onChanged: (String? newValue) {
+        if (newValue == "new_category") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => new AddCategory()),
+          );
+        }
+
         setState(() {
           _selectedCategory = newValue;
         });
       },
       items: categoryItems);
+
+  Widget buildRadio(String title, int value) => ListTile(
+        contentPadding: const EdgeInsets.only(left: 1, right: 1),
+        title: Text(title),
+        leading: Radio<int>(
+          groupValue: _incomeExpense,
+          value: value,
+          onChanged: (int? value) {
+            setState(() {
+              _incomeExpense = value;
+            });
+          },
+        ),
+      );
+
+  Widget buildIncomeExpense() => ListTile(
+        title: Text("Transaction Type"),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Row(
+            children: [
+              Expanded(child: buildRadio("Income", 1)),
+              Expanded(child: buildRadio("Expense", 2))
+            ],
+          ),
+        ),
+      );
 }

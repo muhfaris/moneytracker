@@ -16,7 +16,7 @@ class DatabaseHandler {
       version: 1
     );
   }
-
+/*
   Future<int> insertTransaction(List<User> users)async{
     int result = 0;
     final Database db = await initializeDB();
@@ -35,4 +35,5 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     await db.delete("transactions", where: "id=?", whereArgs: [id]);
   }
+ */
 }
