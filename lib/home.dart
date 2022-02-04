@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/transactions/new.dart';
+import 'screens/transactions/add.dart';
 
 class HomeMoneyTracker extends StatelessWidget {
   const HomeMoneyTracker({Key? key}) : super(key: key);
