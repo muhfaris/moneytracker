@@ -14,13 +14,15 @@ class AddTransaction extends StatefulWidget {
 class _AddTransactionState extends State<AddTransaction> {
   final _keyForm = GlobalKey<FormState>();
   final _amount = TextEditingController();
-  final _dateController = TextEditingController();
+  final _descriptions = TextEditingController();
 
+  String? _selectedTransactionType = "income";
   String? _selectedWallet = "bca";
   String? _selectedCategory = "food";
   int? _incomeExpense = 1;
 
   late DateTime _selectedDate = DateTime.now();
+  final _dateController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
     final _datePicker = await showDatePicker(
@@ -47,11 +49,13 @@ class _AddTransactionState extends State<AddTransaction> {
         child: ListView(
           padding: EdgeInsets.all(16),
           children: <Widget>[
-            buildIncomeExpense(),
+            buildTransactionTypes(),
             const SizedBox(height: 16),
             buildWalletTyte(),
             const SizedBox(height: 16),
             buildAmount(),
+            const SizedBox(height: 16),
+            buildDescription(),
             const SizedBox(height: 16),
             buildDate(),
             const SizedBox(height: 16),
@@ -71,6 +75,28 @@ class _AddTransactionState extends State<AddTransaction> {
       ),
     ));
   }
+
+  List<DropdownMenuItem<String>> get transactionTypes {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Income"), value: "income"),
+      DropdownMenuItem(child: Text("Expense"), value: "expense"),
+      DropdownMenuItem(child: Text("Transfer"), value: "transfer"),
+    ];
+    return menuItems;
+  }
+
+  Widget buildTransactionTypes() => DropdownButtonFormField(
+      decoration: InputDecoration(
+        labelText: 'Choose Transaction',
+        border: OutlineInputBorder(),
+      ),
+      value: _selectedTransactionType,
+      onChanged: (String? newValue) {
+        setState(() {
+          _selectedTransactionType = newValue;
+        });
+      },
+      items: transactionTypes);
 
   List<DropdownMenuItem<String>> get walletItems {
     List<DropdownMenuItem<String>> menuItems = [
@@ -109,6 +135,16 @@ class _AddTransactionState extends State<AddTransaction> {
             return 'Your amount is empty';
           }
         },
+      );
+
+  Widget buildDescription() => TextField(
+        controller: _descriptions,
+        decoration: InputDecoration(
+          labelText: "Descriptions",
+          border: OutlineInputBorder(),
+          hintText: "write note",
+        ),
+        keyboardType: TextInputType.multiline,
       );
 
   Widget buildDate() => TextFormField(
@@ -179,7 +215,8 @@ class _AddTransactionState extends State<AddTransaction> {
           child: Row(
             children: [
               Expanded(child: buildRadio("Income", 1)),
-              Expanded(child: buildRadio("Expense", 2))
+              Expanded(child: buildRadio("Expense", 2)),
+              Expanded(child: buildRadio("Transfer", 2))
             ],
           ),
         ),

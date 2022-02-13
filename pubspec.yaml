@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
   sqflite: ^1.3.0
   english_words: ^4.0.0
+  babstrap_settings_screen : ^0.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

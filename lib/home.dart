@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneytracker/screens/settings/setting.dart';
 import 'screens/transactions/add.dart';
+import 'screens/settings/setting.dart';
 
 class HomeMoneyTracker extends StatelessWidget {
   const HomeMoneyTracker({Key? key}) : super(key: key);
@@ -65,7 +67,12 @@ class HomeMoneyTracker extends StatelessWidget {
                   Icons.menu,
                   color: Colors.black12,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context)=> new Settings()),
+                  );
+                },
               ),
             ],
           ),
